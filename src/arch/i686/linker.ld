@@ -1,28 +1,32 @@
-ENTRY(_kstart)
+ENTRY(_kstart_low)
+
+PHYSICAL_START = 0x00100000;
+VIRTUAL_OFFSET = 0xC0000000;
 
 SECTIONS
 {
-    . = 1M;
+    . = PHYSICAL_START + VIRTUAL_OFFSET;
 
     _kernel_start = .;
 
-    .text BLOCK(4K) : ALIGN(4K)
+    .text ALIGN(4) : AT(ADDR(.text) - VIRTUAL_OFFSET)
     {
         *(.multiboot)
+        *(.textlow)
         *(.text)
     }
 
-    .rodata BLOCK(4K) : ALIGN(4K)
+    .rodata ALIGN(4) : AT(ADDR(.rodata) - VIRTUAL_OFFSET)
     {
         *(.rodata)
     }
 
-    .data BLOCK(4K) : ALIGN(4K)
+    .data ALIGN(4K) : AT(ADDR(.data) - VIRTUAL_OFFSET)
     {
         *(.data)
     }
 
-    .bss BLOCK(4K) : ALIGN(4K)
+    .bss ALIGN(32) : AT(ADDR(.bss) - VIRTUAL_OFFSET)
     {
         *(COMMON)
         *(.bss)

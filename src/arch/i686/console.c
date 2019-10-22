@@ -14,7 +14,7 @@ typedef struct
     uint8_t colour;
 } Symbol;
 
-static Symbol* _vram = (Symbol*) 0xB8000;
+static Symbol* _vram = (Symbol*) 0xC00B8000;
 static unsigned _xpos = 0;
 static unsigned _ypos = 0;
 
