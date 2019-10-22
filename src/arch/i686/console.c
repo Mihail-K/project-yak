@@ -2,6 +2,7 @@
 
 #include "console.h"
 #include "io.h"
+#include "math.h"
 
 #define CONSOLE_XMAX 80
 #define CONSOLE_YMAX 25
@@ -14,17 +15,17 @@ typedef struct
 } Symbol;
 
 static Symbol* _vram = (Symbol*) 0xB8000;
-static int _xpos = 0;
-static int _ypos = 0;
+static unsigned _xpos = 0;
+static unsigned _ypos = 0;
 
-static inline int _console_offset(void)
+static inline unsigned _console_offset(void)
 {
     return _xpos + _ypos * CONSOLE_XMAX;
 }
 
 static inline void _console_scroll(void)
 {
-    int i = 0;
+    unsigned i = 0;
 
     for (; i < CONSOLE_SIZE - CONSOLE_XMAX; i++)
     {
@@ -37,7 +38,7 @@ static inline void _console_scroll(void)
     }
 }
 
-static inline void _console_update_cursor()
+static inline void _console_update_cursor(void)
 {
     outb(0x3D4, 0x0F);
     outb(0x3D5, (uint8_t)(_console_offset() & 0xFF));
@@ -47,7 +48,7 @@ static inline void _console_update_cursor()
 
 void console_clear(void)
 {
-    for (int i = 0; i < CONSOLE_SIZE; i++)
+    for (unsigned i = 0; i < CONSOLE_SIZE; i++)
     {
         _vram[i].ch = 0;
         _vram[i].colour = 0;
@@ -90,6 +91,14 @@ void console_putch(char ch)
         _console_scroll();
         _ypos--;
     }
+
+    _console_update_cursor();
+}
+
+void console_set_pos(unsigned xpos, unsigned ypos)
+{
+    _xpos = umin(xpos, CONSOLE_XMAX);
+    _ypos = umin(ypos, CONSOLE_YMAX);
 
     _console_update_cursor();
 }
