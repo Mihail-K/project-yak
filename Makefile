@@ -11,9 +11,12 @@ LD := ld
 LDFLAGS := --target=i686-pc-none-elf -march=i686 -ffreestanding -nostdlib -L build
 LDWARNINGS := -Werror -Wall
 
-.PHONY: all clean
+.PHONY: all clean run-qemu
 
 all: build/kernel.iso
+
+run-qemu: build/kernel.iso
+	qemu-system-i386 -cdrom build/kernel.iso -curses
 
 clean:
 	rm -r build/*
