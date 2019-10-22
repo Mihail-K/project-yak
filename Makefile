@@ -1,14 +1,13 @@
 ARFLAGS := rcs
 
-ASM := nasm
+ASM      := nasm
 ASMFLAGS := -felf32
 
-CC := clang
-CFLAGS := --target=i686-pc-none-elf -march=i686 -fno-builtin -ffreestanding -nostdlib -nostdinc++ -I src/include
+CC 		  := clang
+CFLAGS 	  := --target=i686-pc-none-elf -march=i686 -fno-builtin -ffreestanding -nostdlib -nostdinc++ -I src/include
 CWARNINGS := -Werror -Wall
 
-LD := ld
-LDFLAGS := --target=i686-pc-none-elf -march=i686 -ffreestanding -nostdlib -L build
+LDFLAGS    := --target=i686-pc-none-elf -march=i686 -ffreestanding -nostdlib -L build
 LDWARNINGS := -Werror -Wall
 
 .PHONY: all clean run-qemu
