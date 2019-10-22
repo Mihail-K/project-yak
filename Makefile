@@ -19,7 +19,7 @@ run-qemu: build/kernel.iso
 	qemu-system-i386 -cdrom build/kernel.iso -curses
 
 clean:
-	rm -r build/*
+	rm -rf build/*
 
 build/kernel.iso: build/iso/boot/grub/grub.cfg build/iso/boot/kernel.bin
 	grub-mkrescue -o $@ build/iso
