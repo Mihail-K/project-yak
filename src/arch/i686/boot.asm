@@ -1,4 +1,5 @@
-extern kernel_setup
+extern ksetup
+extern kmain
 
 MB_ALIGN    equ 1 << 0
 MB_MEMINFO  equ 1 << 1
@@ -48,8 +49,11 @@ _kstart:
     ; Load kernel stack.
     mov esp, stack_top
 
-    ; Call arch specific setup.
-    call kernel_setup
+    ; Arch specific setup.
+    call ksetup
+
+    ; Kernel entry.
+    call kmain
 
 .khang:
     ; Hang if kernel exits.

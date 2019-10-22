@@ -6,6 +6,10 @@ ASMFLAGS := -felf32
 CC 		  := clang
 CFLAGS 	  := --target=i686-pc-none-elf -march=i686 -fno-builtin -ffreestanding -nostdlib -nostdinc++ -I src/include
 CWARNINGS := -Werror -Wall
+CSOURCES  := $(shell find src -type f -name "*.c" -not -path "src/arch/**/*")
+CHEADERS  := $(shell find src/include -type f -name "*.h" -not -path "src/arch/**/*")
+COBJECTS  := $(patsubst src/%.c,build/%.o,$(CSOURCES))
+CDEPS     := $(patsubst build/%.o,build/%.d,$(COBJECTS))
 
 LDFLAGS    := --target=i686-pc-none-elf -march=i686 -ffreestanding -nostdlib -L build
 LDWARNINGS := -Werror -Wall
@@ -27,7 +31,14 @@ build/iso/boot/grub/grub.cfg: grub.cfg
 	mkdir -p $(@D)
 	cp $< $@
 
-build/iso/boot/kernel.bin: build/linker.ld build/libarch.a
-	$(CC) -T $< -o $@ $(LDFLAGS) $(LDWARNINGS) -larch
+build/iso/boot/kernel.bin: build/linker.ld build/libarch.a build/libkernel.a
+	$(CC) -T $< -o $@ $(LDFLAGS) $(LDWARNINGS) -larch -lkernel
 
+build/libkernel.a: $(COBJECTS)
+	$(AR) $(ARFLAGS) $@ $^
+
+build/%.o: src/%.c
+	$(CC) $(CFLAGS) $(WARNINGS) -MMD -MP -c $< -o $@
+
+-include $(CDEPS)
 include src/arch/i686/module.mk
