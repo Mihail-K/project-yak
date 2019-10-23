@@ -2,6 +2,7 @@
 #include "gdt.h"
 #include "idt.h"
 #include "logger.h"
+#include "pic.h"
 
 void ksetup()
 {
@@ -13,6 +14,9 @@ void ksetup()
 
     idt_install();
     debug("IDT Ready.\n");
+
+    pic_install();
+    debug("PIC Ready.\n");
 
     asm ("int $250");
 }
