@@ -18,9 +18,9 @@ typedef enum
     TASK_32BIT      = 0b0101,
     TRAP_16BIT      = 0b0111,
     TRAP_32BIT      = 0b1111
-} idt_type_t;
+} IDTType;
 
 void idt_install(void);
-void idt_set_entry(uint8_t index, idt_isrptr_t isr_ptr, uint16_t selector, idt_type_t type, uint8_t flags);
+void idt_set_entry(uint8_t index, idt_isrptr_t isr_ptr, uint16_t selector, IDTType type, uint8_t flags);
 
 #endif

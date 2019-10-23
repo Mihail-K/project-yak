@@ -18,7 +18,7 @@ IDTPointer idtr;
 IDTEntry idt[IDT_SIZE];
 extern idt_isrptr_t isr_handlers[IDT_SIZE];
 
-static IDTEntry _idt_create_entry(idt_isrptr_t isr_ptr, uint16_t selector, idt_type_t type, uint8_t flags)
+static IDTEntry _idt_create_entry(idt_isrptr_t isr_ptr, uint16_t selector, IDTType type, uint8_t flags)
 {
     IDTEntry entry;
 
@@ -55,7 +55,7 @@ void idt_install(void)
     _idt_load_idtr();
 }
 
-void idt_set_entry(uint8_t index, idt_isrptr_t isr_ptr, uint16_t selector, idt_type_t type, uint8_t flags)
+void idt_set_entry(uint8_t index, idt_isrptr_t isr_ptr, uint16_t selector, IDTType type, uint8_t flags)
 {
     idt[index] = _idt_create_entry(isr_ptr, selector, type, flags);
 }
