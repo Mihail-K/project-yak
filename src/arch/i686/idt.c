@@ -1,3 +1,4 @@
+#include "assert.h"
 #include "idt.h"
 
 typedef struct __attribute__((packed)) {
@@ -57,5 +58,8 @@ void idt_install(void)
 
 void idt_set_entry(uint8_t index, idt_isrptr_t isr_ptr, uint16_t selector, IDTType type, uint8_t flags)
 {
+    // ISR should be in Kernel space.
+    assert((uintptr_t) isr_ptr >= 0xC0000000);
+
     idt[index] = _idt_create_entry(isr_ptr, selector, type, flags);
 }
