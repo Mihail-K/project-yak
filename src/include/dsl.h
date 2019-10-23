@@ -2,6 +2,6 @@
 #define __DSL_H__
 
 #define forever while(1)
-#define hang()  forever {}
+#define hang()  forever { asm("hlt"); }
 
 #endif

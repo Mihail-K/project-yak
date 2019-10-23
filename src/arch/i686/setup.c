@@ -1,18 +1,18 @@
 #include "console.h"
 #include "gdt.h"
 #include "idt.h"
-#include "kprintf.h"
+#include "logger.h"
 
 void ksetup()
 {
     console_clear();
-    console_writeln("Console Ready.");
+    debug("Console Ready.\n");
 
     gdt_install();
-    console_writeln("GDT Ready.");
+    debug("GDT Ready.\n");
 
     idt_install();
-    console_writeln("IDT Ready.");
+    debug("IDT Ready.\n");
 
     asm ("int $250");
 }
