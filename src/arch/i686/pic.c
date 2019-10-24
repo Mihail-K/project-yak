@@ -101,11 +101,11 @@ void pic_toggle_irq(IRQ irq, bool enabled)
     
     if (enabled)
     {
-        value |=  (1 << irq);
+        value = clear_bit(value, irq);
     }
     else
     {
-        value &= ~(1 << irq);
+        value = set_bit(value, irq);
     }
 
     outb(port, value);    
