@@ -21,6 +21,15 @@ void ksetup(uint32_t magic, MultibootInfo* info)
         info("Available Memory: %dMiB.\n", memory / 1024);
     }
 
+    MultibootMemoryMap* mmap = multiboot_get_memory_map(info);
+
+    for (unsigned i = 0; i < multiboot_mmap_entries_count(info); i++)
+    {
+        debug("Base: %u\n", (uint32_t)(mmap[i].base_addr & 0xFFFFFFFF));
+        debug("Len:  %u\n", (uint32_t)(mmap[i].length & 0xFFFFFFFF));
+        debug("Type: %u\n", mmap[i].type);
+    }
+
     gdt_install();
     debug("GDT Ready.\n");
 

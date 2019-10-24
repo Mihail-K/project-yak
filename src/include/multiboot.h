@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include "bitops.h"
+#include "paging.h"
 
 #define MULTIBOOT_MAGIC 0x2BADB002
 
@@ -63,6 +64,23 @@ typedef struct __attribute__((packed)) {
     MultibootVBEInfo vbe;
     MultibootFramebufferInfo framebuffer;
 } MultibootInfo;
+
+typedef struct __attribute__((packed)) {
+    uint32_t size;
+    uint64_t base_addr;
+    uint64_t length;
+    uint32_t type;
+} MultibootMemoryMap;
+
+static inline MultibootMemoryMap* multiboot_get_memory_map(MultibootInfo* info)
+{
+    return (MultibootMemoryMap*) paging_convert_to_virtual(info->mmap_addr);
+}
+
+static inline unsigned multiboot_mmap_entries_count(MultibootInfo* info)
+{
+    return info->mmap_length / sizeof(MultibootMemoryMap);
+}
 
 static inline bool multiboot_feature_available(MultibootInfo* info, MultibootFeature feature)
 {
