@@ -17,4 +17,7 @@ void ksetup()
 
     pic_install();
     debug("PIC Ready.\n");
+
+    pic_toggle_irq(IRQ_PIT, false);
+    asm volatile ("sti");
 }
