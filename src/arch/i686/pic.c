@@ -1,3 +1,4 @@
+#include "assert.h"
 #include "io.h"
 #include "pic.h"
 
@@ -67,7 +68,7 @@ void pic_install(void)
     _pic_remap(PIC_MASTER_OFFSET, PIC_SLAVE_OFFSET);
 }
 
-void pic_send_eoi(uint8_t irq)
+void pic_send_eoi(IRQ irq)
 {
     if (irq >= 8)
     {
@@ -77,4 +78,35 @@ void pic_send_eoi(uint8_t irq)
     }
 
     outb(PIC_MASTER_COMMAND_PORT, PIC_END_OF_INTERRUPT);
+}
+
+void pic_toggle_irq(IRQ irq, bool enabled)
+{
+    uint16_t port;
+    uint8_t value;
+
+    assert(irq <= IRQ_MAX);
+
+    if (irq < 8)
+    {
+        port = PIC_MASTER_DATA_PORT;
+    }
+    else
+    {
+        port = PIC_SLAVE_DATA_PORT;
+        irq -= 8;
+    }
+
+    value = inb(port);
+    
+    if (enabled)
+    {
+        value |=  (1 << irq);
+    }
+    else
+    {
+        value &= ~(1 << irq);
+    }
+
+    outb(port, value);    
 }

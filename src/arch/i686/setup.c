@@ -17,6 +17,4 @@ void ksetup()
 
     pic_install();
     debug("PIC Ready.\n");
-
-    asm ("int $250");
 }
