@@ -34,6 +34,18 @@ typedef enum {
 #define IRQ_MIN 0
 #define IRQ_MAX 15
 
+// Disables interrupts from the PIC.
+static inline void pic_disable_interrupts(void)
+{
+    asm volatile ("cli");
+}
+
+// Enables interrupts from the PIC.
+static inline void pic_enable_interrupts(void)
+{
+    asm volatile ("sti");
+}
+
 // Determines if an interrupt is an IRQ from the PIC.
 static inline bool pic_interrupt_is_irq(uint8_t interrupt)
 {

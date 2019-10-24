@@ -11,7 +11,6 @@ void ksetup(uint32_t magic, MultibootInfo* info)
     console_clear();
     debug("Console Ready.\n");
 
-    // Validate multiboot magic number.
     assert(magic == MULTIBOOT_MAGIC);
     assert(multiboot_feature_available(info, MULTIBOOT_FEATURE_MMAP));
 
@@ -32,5 +31,5 @@ void ksetup(uint32_t magic, MultibootInfo* info)
     debug("PIC Ready.\n");
 
     pic_toggle_irq(IRQ_PIT, false);
-    asm volatile ("sti");
+    pic_enable_interrupts();
 }
