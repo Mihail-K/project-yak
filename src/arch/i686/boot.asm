@@ -49,6 +49,10 @@ _kstart:
     ; Load kernel stack.
     mov esp, stack_top
 
+    add ebx, VIRTUAL_OFFSET
+    push ebx
+    push eax
+
     ; Arch specific setup.
     call ksetup
 
