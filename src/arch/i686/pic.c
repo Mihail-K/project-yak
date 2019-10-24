@@ -1,4 +1,5 @@
 #include "assert.h"
+#include "bitops.h"
 #include "io.h"
 #include "pic.h"
 
@@ -9,9 +10,6 @@
 #define PIC_MASTER_DATA_PORT    (PIC_MASTER_ADDRESS + 1)
 #define PIC_SLAVE_DATA_PORT     (PIC_SLAVE_ADDRESS  + 1)
 #define PIC_END_OF_INTERRUPT    0x20
-
-#define PIC_MASTER_OFFSET 0x20
-#define PIC_SLAVE_OFFSET  0x28
 
 #define ICW1_ICW4	    0x01		/* ICW4 (not) needed */
 #define ICW1_SINGLE	    0x02		/* Single (cascade) mode */
