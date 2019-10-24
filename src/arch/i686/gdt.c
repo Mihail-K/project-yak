@@ -1,12 +1,18 @@
 #include "gdt.h"
 
 #define GDT_NULL        0
-#define GDT_CODE_KERNEL GDT_DESCTYPE(1) | GDT_PRES(1) | GDT_SAVL(0) | \
+#define GDT_KERNEL_CODE GDT_DESCTYPE(1) | GDT_PRES(1) | GDT_SAVL(0) | \
                         GDT_LONG(0)     | GDT_SIZE(1) | GDT_GRAN(1) | \
                         GDT_PRIV(0)     | GDT_CODE_EXRD
-#define GDT_DATA_KERNEL GDT_DESCTYPE(1) | GDT_PRES(1) | GDT_SAVL(0) | \
+#define GDT_KERNEL_DATA GDT_DESCTYPE(1) | GDT_PRES(1) | GDT_SAVL(0) | \
                         GDT_LONG(0)     | GDT_SIZE(1) | GDT_GRAN(1) | \
                         GDT_PRIV(0)     | GDT_DATA_RDWR
+#define GDT_USER_CODE   GDT_DESCTYPE(1) | GDT_PRES(1) | GDT_SAVL(0) | \
+                        GDT_LONG(0)     | GDT_SIZE(1) | GDT_GRAN(1) | \
+                        GDT_PRIV(3)     | GDT_CODE_EXRD
+#define GDT_USER_DATA   GDT_DESCTYPE(1) | GDT_PRES(1) | GDT_SAVL(0) | \
+                        GDT_LONG(0)     | GDT_SIZE(1) | GDT_GRAN(1) | \
+                        GDT_PRIV(3)     | GDT_DATA_RDWR
 
 #pragma pack(push, 1)
 typedef struct {
@@ -26,7 +32,7 @@ typedef struct {
 #pragma pack(pop)
 
 GDTDescriptor gdtr;
-GDTEntry gdt[3];
+GDTEntry gdt[5];
 
 static GDTEntry _gdt_create_entry(uint32_t base, uint32_t limit, uint16_t flags)
 {
@@ -48,8 +54,10 @@ static GDTEntry _gdt_create_entry(uint32_t base, uint32_t limit, uint16_t flags)
 static void _gdt_initialize_default(void)
 {
     gdt_set_entry(0, 0x00000000, 0x00000000, GDT_NULL);
-    gdt_set_entry(1, 0x00000000, 0xFFFFFFFF, GDT_CODE_KERNEL);
-    gdt_set_entry(2, 0x00000000, 0xFFFFFFFF, GDT_DATA_KERNEL);
+    gdt_set_entry(1, 0x00000000, 0xFFFFFFFF, GDT_KERNEL_CODE);
+    gdt_set_entry(2, 0x00000000, 0xFFFFFFFF, GDT_KERNEL_DATA);
+    gdt_set_entry(3, 0x00000000, 0xBFFFFFFF, GDT_USER_CODE);
+    gdt_set_entry(4, 0x00000000, 0xBFFFFFFF, GDT_USER_DATA);
 }
 
 static void _gdt_load_gdtr(void)
