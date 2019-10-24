@@ -1,9 +1,10 @@
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "console.h"
 #include "kprintf.h"
 
-static void kprint_signed(signed long value, int base)
+static void kprint_signed(int32_t value, int base)
 {
     static char* alphabet = "0123456789ABCDEF";
 
@@ -40,7 +41,7 @@ static void kprint_signed(signed long value, int base)
     console_write(&buffer[index]);
 }
 
-static void kprint_unsigned(unsigned long value, int base)
+static void kprint_unsigned(uint32_t value, int base)
 {
     static char* alphabet = "0123456789ABCDEF";
 
@@ -93,15 +94,15 @@ void kvprintf(const char* format, va_list args)
         {
             case 'd':
             case 'i':
-                kprint_signed(va_arg(args, signed long), 10);
+                kprint_signed(va_arg(args, int32_t), 10);
                 break;
 
             case 'u':
-                kprint_unsigned(va_arg(args, unsigned long), 10);
+                kprint_unsigned(va_arg(args, uint32_t), 10);
                 break;
 
             case 'x':
-                kprint_unsigned(va_arg(args, unsigned long), 16);
+                kprint_unsigned(va_arg(args, uint32_t), 16);
                 break;
 
             case 's':
