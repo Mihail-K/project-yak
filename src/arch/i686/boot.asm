@@ -71,11 +71,13 @@ section .data
 align 4096
 boot_page_directory:
     ; Map first 4MB to physical offset 0.
-    dd PAGE_PRESENT | PAGE_READWRITE | PAGE_LARGE
+    dd 0 | (PAGE_PRESENT | PAGE_READWRITE | PAGE_LARGE)
     times 768 - 1 dd 0
     ; Map memory at 3GB mark to physical offset 0.
-    dd PAGE_PRESENT | PAGE_READWRITE | PAGE_LARGE
-    times 1024 - 768 dd 0
+    dd 0 | (PAGE_PRESENT | PAGE_READWRITE | PAGE_LARGE)
+    times 1023 - 769 dd 0
+    ; Map page directory into itself at end of memory.
+    dd (boot_page_directory - VIRTUAL_OFFSET) + (PAGE_PRESENT | PAGE_READWRITE)
 
 ; Kernel stack (16KB)
 section .bss

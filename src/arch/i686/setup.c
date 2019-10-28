@@ -39,6 +39,9 @@ void ksetup(uint32_t magic, MultibootInfo* info)
     pic_install();
     debug("PIC Ready.\n");
 
+    paging_install();
+    debug("Paging Ready.\n");
+
     pic_toggle_irq(IRQ_PIT, false);
     pic_enable_interrupts();
 }

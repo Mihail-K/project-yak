@@ -21,4 +21,6 @@ paddr_t paging_map_page(paddr_t physical_page, vaddr_t virtual_page, uint8_t fla
 // The previous physical mapping is returned.
 paddr_t paging_unmap_page(vaddr_t virtual_page);
 
+void paging_install(void);
+
 #endif
