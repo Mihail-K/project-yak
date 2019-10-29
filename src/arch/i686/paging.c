@@ -82,7 +82,7 @@ typedef uint32_t* page_table_t;
 #define PAGE_DIRECTORY_ENTRIES 1024
 #define PAGE_TABLE_ENTRIES     1024
 
-static PageDirectory _page_directory = (PageDirectory) ACTIVE_PAGE_DIRECTORY_ADDRESS;
+static volatile PageDirectory _page_directory = (PageDirectory) ACTIVE_PAGE_DIRECTORY_ADDRESS;
 
 static inline unsigned _paging_get_page_directory_index(vaddr_t virtual_addr)
 {
